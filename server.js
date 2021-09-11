@@ -4,8 +4,8 @@ const _server = _express();
 const _port = 4000;
 
 // Configurar cabeceras y cors
-const cors = require('cors');
-const app = require('express');
+const app = require('cors');
+//const app = require('express');
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');

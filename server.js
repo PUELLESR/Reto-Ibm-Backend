@@ -2,7 +2,11 @@ const _express = require('express');
 const _server = _express();
 
 const _port = 4000;
-header('access-Control-Allow-Origin:*');
+const cors = require('cors');
+app.use(cors({
+    origin: 'http://alb-ibm-web-472115302.us-west-2.elb.amazonaws.com/'
+}));
+//header('access-Control-Allow-Origin:*');
 _server.get('/retoibm/sumar/:sumando01/:sumando02', function(request, response) {
   try{
     var _sumando01 = new Number(request.params.sumando01);

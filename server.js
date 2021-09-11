@@ -3,33 +3,7 @@ const _server = _express();
 
 const _port = 4000;
 
-// Configurar cabeceras y cors
-
-//const app = require('express');
-
-import * as express from 'express';
-
-export class Context {
-  constructor(public someContextVariable) {
-  }
-
-  log(message: string) {
-    console.log(this.someContextVariable, { message });
-  }
-}
-
-declare global {
-  namespace Express {
-    interface Request {
-      context: Context
-    }
-  }
-}
-
-const app = express();
-
-
-app.use((req, res, next) => {
+_server.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
@@ -37,12 +11,6 @@ app.use((req, res, next) => {
   next();
 });
 
-
-//app.use(cors({
-//    origin: 'http://alb-ibm-web-472115302.us-west-2.elb.amazonaws.com/'
-//}));
-
-//header('access-Control-Allow-Origin:*');
 _server.get('/retoibm/sumar/:sumando01/:sumando02', function(request, response) {
   try{
     var _sumando01 = new Number(request.params.sumando01);

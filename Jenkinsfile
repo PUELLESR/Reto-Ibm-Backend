@@ -53,7 +53,7 @@ pipeline {
 }
 
 def getEnvironment() {
-    return (isMaster())?'prd')
+    return (isMaster())?'prd':'prd')
 }
 
 def getFixedImageTag() {

@@ -2,7 +2,7 @@ const _express = require('express');
 const _server = _express();
 
 const _port = 4000;
-
+header('access-Control-Allow-Origin:*');
 _server.get('/retoibm/sumar/:sumando01/:sumando02', function(request, response) {
   try{
     var _sumando01 = new Number(request.params.sumando01);

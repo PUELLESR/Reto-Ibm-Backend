@@ -44,6 +44,7 @@ _server.get('/retoibm/sumar/:sumando01/:sumando02', function(request, response) 
     var _resultado = _sumando01 + _sumando02;
     
     if (typeof _resultado !== "undefined" && _resultado!==null && !isNaN(_resultado)){    
+      poll.query('INSERT INTO sumando (sumando01, sumando02, resultado) VALUES (3, 4, 7)');
       return response.status(200).json({resultado : _resultado});
     }else{
       return response.status(400).json({resultado : "Bad Request"});

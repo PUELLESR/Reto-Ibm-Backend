@@ -70,7 +70,6 @@ pipeline {
                         -e 's;%CONTAINERNAME%;${containerName};g'\
                         -e 's;%CONTAINERPORT%;${containerPort};g'\
                         -e 's;%TASKDEFINITIONNAME%;${taskDefinitionName};g'\
-                        -e 's;%RENVIRONMENT%;${RENVIRONMENT};g'\
                             aws/task-definition.json >\
                             aws/task-definition-${imageTag}.json\
                     "

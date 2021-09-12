@@ -1,0 +1,45 @@
+{
+  "containerDefinitions": [
+    {
+      "image": "987038959406.dkr.ecr.us-west-2.amazonaws.com/%REPO%",
+      "essential": true,
+      "name": "%CONTAINERNAME%",
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/td-ibm-backend",
+          "awslogs-region": "us-west-2",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "cpu": 256,
+      "memory": 512,
+      "portMappings": [
+        {
+          "protocol": "tcp",
+          "containerPort": %CONTAINERPORT%
+        }
+      ],
+      "environment": [
+        {
+          "name": "NODE_ENV",
+          "value": "%CONTAINERENV%"
+        }
+      ]
+    }
+  ],
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "executionRoleArn": "arn:aws:iam::987038959406:role/ecsTaskExecutionRole",
+  "networkMode": "awsvpc",
+  "cpu": "256",
+  "family": "%TASKDEFINITIONNAME%",
+  "memory": "512",
+  "tags": [
+    {
+      "key": "proyecto",
+      "value": "IBM"
+    }
+  ]
+}

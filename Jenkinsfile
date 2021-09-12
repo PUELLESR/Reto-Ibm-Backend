@@ -50,6 +50,64 @@ pipeline {
                 }
             }
         }
+        stage ('Deploy') {
+
+            steps {
+                script {
+                    def imageTag = "${IMAGE_TAG}"
+                    def imageName = "${IMAGE_NAME}:${imageTag}"
+                    def containerName = "container-ibm-backend"
+                    def containerPort = 4000
+                    def applicationName = "AppECS-ibm-backend-service-ibm-backend2"
+                    def deploymentGroupName = "DgpECS-ibm-backend-service-ibm-backend2"
+                    def taskDefinitionName = "td-ibm-backend"
+                    def containerEnv = getContainerEnvironment()
+
+                    sh  "                                                                     \
+                    sed -e 's;%REPO%;${imageName};g'\
+                        -e 's;%ENVIRONMENT%;${ENVIRONMENT};g'\
+                        -e 's;%UENVIRONMENT%;${ENVIRONMENT.toUpperCase()};g'\
+                        -e 's;%CONTAINERNAME%;${containerName};g'\
+                        -e 's;%CONTAINERPORT%;${containerPort};g'\
+                        -e 's;%CONTAINERENV%;${containerEnv};g'\
+                        -e 's;%TASKDEFINITIONNAME%;${taskDefinitionName};g'\
+                        -e 's;%RENVIRONMENT%;${RENVIRONMENT};g'\
+                            aws/task-definition.json >\
+                            aws/task-definition-${imageTag}.json\
+                    "
+
+                    sh "\$(aws ecr get-login --no-include-email --region ${AWS_REGION})"
+                    def image = docker.image("${AWS_ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com/devops/aws-cli:${AWS_CLI_VERSION}")
+                    image.inside('-u 0') {
+                        TASK_DEFINITION = sh (returnStdout: true, script:"                                                                     \
+                            aws ecs register-task-definition --region ${AWS_REGION} --family ${taskDefinitionName}                \
+                            --cli-input-json file://aws/task-definition-${imageTag}.json        \
+                        ")
+                    }
+
+                    TASK_DEFINITION_OBJECT = jsonParse(TASK_DEFINITION)
+
+                    def content = "version: 0.0 \
+                    \nResources: \
+                    \n  - TargetService: \
+                    \n      Type: AWS::ECS::Service \
+                    \n      Properties: \
+                    \n        TaskDefinition: \"${TASK_DEFINITION_OBJECT.taskDefinition.taskDefinitionArn}\" \
+                    \n        LoadBalancerInfo: \
+                    \n          ContainerName: \"${containerName}\" \
+                    \n          ContainerPort: ${containerPort}"
+
+                    DEPLOYMENT_ID = sh (returnStdout: true, script: "aws deploy create-deployment --application-name ${applicationName} --deployment-group-name ${deploymentGroupName} --revision \"revisionType='String',string={content='${content}'\"}  --region ${AWS_REGION}").trim()
+                    DEPLOYMENT_OBJECT = jsonParse(DEPLOYMENT_ID)
+                    echo "Deployment-object is => ${DEPLOYMENT_ID}"
+                    echo "Deployment-Id is => ${DEPLOYMENT_OBJECT.deploymentId}"
+                }
+                timeout(time: 10, unit: 'MINUTES'){
+                    awaitDeploymentCompletion("${DEPLOYMENT_OBJECT.deploymentId}")
+                }
+            }
+
+        }       
 }
 }
 

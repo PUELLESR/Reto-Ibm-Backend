@@ -99,9 +99,9 @@ pipeline {
                     echo "Deployment-object is => ${DEPLOYMENT_ID}"
                     echo "Deployment-Id is => ${DEPLOYMENT_OBJECT.deploymentId}"
                 }
-                timeout(time: 10, unit: 'MINUTES'){
+                /*timeout(time: 10, unit: 'MINUTES'){
                     awaitDeploymentCompletion("${DEPLOYMENT_OBJECT.deploymentId}")
-                }
+                }*/
             }
 
         }       

@@ -3,15 +3,23 @@ const _server = _express();
 const { Router } = require('express');
 const router = Router();
 
-const { createUser, getSuma} = require('index.controller.js');
+//const { createUser, getSuma} = require('index.controller.js');
 
-const app = express();
+const app = _express();
 
-app.use(express.json());
+const { Pool } = require('pg');
+const poll = new Pool ({
+    host: 'database-ibm.cblyx9r9oy2i.us-west-2.rds.amazonaws.com',
+    user: 'postgres',
+    password: 'postgres',
+    database: 'operacion',
+    port: '5432'
+});
+
+app.use(_express.json());
 
 //router
-app.use(require('index.controller.js'));
-
+//app.use(require('index.controller.js'));
 
 //middlewares
 //router.get('/users', getSuma);
@@ -54,7 +62,7 @@ _server.post('/retoibm/sumar/:sumando01/:sumando02', function(request, response)
         
     if (typeof _resultado !== "undefined" && _resultado!==null && !isNaN(_resultado)){    
       //pool.query('INSERT INTO sumando (sumando01, sumando02, resultado) VALUES ($_sumando01, $_sumando02, $_resultado)', [_sumando01, _sumando02, _resultado]);
-      pool.query('INSERT INTO sumando (sumando01, sumando02, resultado) VALUES (3, 4, 7)');
+      poll.query('INSERT INTO sumando (sumando01, sumando02, resultado) VALUES (3, 4, 7)');
     }else{
       return response.status(400).json({resultado : "Bad Request"});
     }

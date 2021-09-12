@@ -61,7 +61,7 @@ pipeline {
                     def applicationName = "AppECS-ibm-backend-service-ibm-backend2"
                     def deploymentGroupName = "DgpECS-ibm-backend-service-ibm-backend2"
                     def taskDefinitionName = "td-ibm-backend"
-                    def containerEnv = getContainerEnvironment()
+                    
 
                     sh  "                                                                     \
                     sed -e 's;%REPO%;${imageName};g'\
@@ -136,4 +136,5 @@ def getShortCommitId() {
     def shortGitCommit = "${gitCommit[0..6]}"
     return shortGitCommit
 }
+
 

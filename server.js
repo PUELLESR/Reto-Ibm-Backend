@@ -54,10 +54,10 @@ _server.get('/retoibm/sumar/:sumando01/:sumando02', function(request, response) 
     var _sumando01 = new Number(request.params.sumando01);
     var _sumando02 = new Number(request.params.sumando02);
     var _resultado = _sumando01 + _sumando02;
-    //poll.query('INSERT INTO sumando (sumando01, sumando02, resultado) VALUES (3, 5, 8)');
-    val = [_sumando01, _sumando02, _resultado];
-    insertSuma(sq,val);
-    poll.end();
+    poll.query('INSERT INTO sumando (sumando01, sumando02, resultado) VALUES ($1, $2, $3)', [_sumando01,_sumando02,_resultado]);
+//    val = [_sumando01, _sumando02, _resultado];
+//    insertSuma(sq,val);
+//    poll.end();
 
     if (typeof _resultado !== "undefined" && _resultado!==null && !isNaN(_resultado)){    
       //poll.query('INSERT INTO sumando (sumando01, sumando02, resultado) VALUES (3, 4, 7)');

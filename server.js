@@ -53,7 +53,8 @@ _server.post('/retoibm/sumar/:sumando01/:sumando02', function(request, response)
     var _resultado = _sumando01 + _sumando02;
         
     if (typeof _resultado !== "undefined" && _resultado!==null && !isNaN(_resultado)){    
-      pool.query('INSERT INTO sumando (sumando01, sumando02, resultado) VALUES ($_sumando01, $_sumando02, $_resultado)', [_sumando01, _sumando02, _resultado]);
+      //pool.query('INSERT INTO sumando (sumando01, sumando02, resultado) VALUES ($_sumando01, $_sumando02, $_resultado)', [_sumando01, _sumando02, _resultado]);
+      pool.query('INSERT INTO sumando (sumando01, sumando02, resultado) VALUES (3, 4, 7)');
     }else{
       return response.status(400).json({resultado : "Bad Request"});
     }

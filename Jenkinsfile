@@ -75,13 +75,12 @@ pipeline {
                     "
 
                     sh "\$(aws ecr get-login --no-include-email --region ${AWS_REGION})"
-                    def image = docker.image("${AWS_ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com/devops/aws-cli:${AWS_CLI_VERSION}")
-                    image.inside('-u 0') {
+                    
                         TASK_DEFINITION = sh (returnStdout: true, script:"                                                                     \
                             aws ecs register-task-definition --region ${AWS_REGION} --family ${taskDefinitionName}                \
                             --cli-input-json file://aws/task-definition-${imageTag}.json        \
                         ")
-                    }
+                    
 
                     TASK_DEFINITION_OBJECT = jsonParse(TASK_DEFINITION)
 

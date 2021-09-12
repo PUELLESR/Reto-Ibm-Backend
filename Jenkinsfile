@@ -75,7 +75,7 @@ pipeline {
                     "
 
                     sh "\$(aws ecr get-login --no-include-email --region ${AWS_REGION})"
-                    
+                     def pomProjectVersion = sh script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout', returnStdout: true
                         TASK_DEFINITION = sh (returnStdout: true, script:"                                                                     \
                             aws ecs register-task-definition --region ${AWS_REGION} --family ${taskDefinitionName}                \
                             --cli-input-json file://aws/task-definition-${imageTag}.json        \
